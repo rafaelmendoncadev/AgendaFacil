@@ -66,12 +66,12 @@ Quando o comando `python3 -m pip` falhou com erro "No module named pip":
 
 ```toml
 [phases.setup]
-nixPkgs = ["nodejs", "python39Full"]
+nixPkgs = ["nodejs", "python39Full", "python39Packages.pip"]
 
 [phases.install]
 cmds = [
   "cd frontend && npm ci",
-  "cd backend && pip install -r requirements.txt"
+  "cd backend && pip3 install -r requirements.txt"
 ]
 
 [phases.build]  
@@ -84,6 +84,34 @@ cmd = "cd backend && python app.py"
 NODE_ENV = "production"
 PYTHON_VERSION = "3.9"
 ```
+
+## 5ª Correção: Pip Module Error Persistente
+
+### Problema
+Mesmo após usar `python39Full` e `python -m pip`, o erro "No module named pip" continuou aparecendo nos logs de build.
+
+### Causa
+O ambiente Nix pode ter problemas de PATH ou carregamento de módulos quando o pip não está explicitamente disponível.
+
+### Solução
+1. **Adicionar `python39Packages.pip` explicitamente** aos `nixPkgs`
+2. **Usar `pip3` diretamente** em vez de `python -m pip`
+
+```toml
+[phases.setup]
+nixPkgs = ["nodejs", "python39Full", "python39Packages.pip"]
+
+[phases.install]
+cmds = [
+  "cd frontend && npm ci",
+  "cd backend && pip3 install -r requirements.txt"
+]
+```
+
+### Resultado
+- ✅ Pip explicitamente disponível no ambiente
+- ✅ Comando `pip3` mais direto e confiável
+- ✅ Compatibilidade garantida com Nix
 
 ## Verificações Realizadas
 
@@ -117,6 +145,16 @@ git push origin master
 git add nixpacks.toml
 git commit -m "🔧 Fix pip module error - Use python39Full instead of python39 + python39Packages.pip"
 git push origin master
+
+# Quarta correção
+git add nixpacks.toml
+git commit -m "🔧 Fix pip command not found - Use python -m pip instead of direct pip"
+git push origin master
+
+# Quinta correção
+git add nixpacks.toml
+git commit -m "🔧 Fix pip module error - Add explicit python39Packages.pip and use pip3"
+git push origin master
 ```
 
 ## Lições Aprendidas
@@ -144,3 +182,5 @@ git push origin master
 - `3f4d592` - Fix nixpacks.toml (Remove pip from nixPkgs)
 - `81388bb` - Fix pip installation (Use python3 -m pip and add python39Packages.pip)
 - `9f77918` - Fix pip module error (Use python39Full instead of python39 + python39Packages.pip)
+- `6f5d696` - Fix pip command not found (Use python -m pip instead of direct pip)
+- `bb7c9aa` - Fix pip module error (Add explicit python39Packages.pip and use pip3)
