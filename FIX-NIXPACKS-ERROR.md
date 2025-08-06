@@ -26,6 +26,7 @@ nixPkgs = ["nodejs", "python39", "pip"]
 
 ## Solução Aplicada
 
+### Primeira Correção
 Removemos o `pip` da lista de `nixPkgs`:
 
 ```toml
@@ -33,16 +34,34 @@ Removemos o `pip` da lista de `nixPkgs`:
 nixPkgs = ["nodejs", "python39"]
 ```
 
+### Segunda Correção (Exit Code 127)
+Quando o comando `pip install` falhou com exit code 127 (comando não encontrado), aplicamos duas correções:
+
+1. **Adicionado python39Packages.pip** explicitamente:
+```toml
+[phases.setup]
+nixPkgs = ["nodejs", "python39", "python39Packages.pip"]
+```
+
+2. **Mudado comando pip** para usar o módulo Python:
+```toml
+[phases.install]
+cmds = [
+  "cd frontend && npm ci",
+  "cd backend && python3 -m pip install -r requirements.txt"
+]
+```
+
 ## Configuração Final do nixpacks.toml
 
 ```toml
 [phases.setup]
-nixPkgs = ["nodejs", "python39"]
+nixPkgs = ["nodejs", "python39", "python39Packages.pip"]
 
 [phases.install]
 cmds = [
   "cd frontend && npm ci",
-  "cd backend && pip install -r requirements.txt"
+  "cd backend && python3 -m pip install -r requirements.txt"
 ]
 
 [phases.build]  
@@ -72,9 +91,16 @@ PYTHON_VERSION = "3.9"
 ## Comandos para Deploy
 
 ```bash
-# Já executados - correção aplicada
+# Já executados - correções aplicadas
+
+# Primeira correção
 git add nixpacks.toml
 git commit -m "🔧 Fix nixpacks.toml - Remove pip from nixPkgs (included with python39)"
+git push origin master
+
+# Segunda correção
+git add nixpacks.toml
+git commit -m "🔧 Fix pip installation - Use python3 -m pip and add python39Packages.pip"
 git push origin master
 ```
 
@@ -87,6 +113,8 @@ git push origin master
 
 ---
 
-**Status**: ✅ Problema resolvido e correção aplicada
+**Status**: ✅ Problemas resolvidos e correções aplicadas
 **Data**: 06/08/2025
-**Commit**: `3f4d592` - Fix nixpacks.toml
+**Commits**: 
+- `3f4d592` - Fix nixpacks.toml (Remove pip from nixPkgs)
+- `81388bb` - Fix pip installation (Use python3 -m pip and add python39Packages.pip)
