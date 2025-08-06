@@ -66,12 +66,12 @@ Quando o comando `python3 -m pip` falhou com erro "No module named pip":
 
 ```toml
 [phases.setup]
-nixPkgs = ["nodejs", "python39Full", "python39Packages.pip"]
+nixPkgs = ["nodejs", "python39", "python39Packages.pip"]
 
 [phases.install]
 cmds = [
   "cd frontend && npm ci",
-  "cd backend && pip3 install -r requirements.txt"
+  "cd backend && python -m pip install --user -r requirements.txt"
 ]
 
 [phases.build]  
@@ -112,6 +112,35 @@ cmds = [
 - ✅ Pip explicitamente disponível no ambiente
 - ✅ Comando `pip3` mais direto e confiável
 - ✅ Compatibilidade garantida com Nix
+
+## 6ª Correção: Ambiente Externamente Gerenciado
+
+### Problema
+O erro "This environment is externally managed" apareceu, indicando que o ambiente Python está sendo gerenciado pelo Nix e não permite instalações diretas de pacotes.
+
+### Causa
+O `python39Full` cria um ambiente gerenciado externamente que bloqueia instalações diretas via pip para evitar conflitos com o gerenciador de pacotes do sistema.
+
+### Solução
+1. **Voltar para `python39`** em vez de `python39Full`
+2. **Usar flag `--user`** para instalar pacotes no diretório do usuário
+3. **Manter `python39Packages.pip`** para garantir disponibilidade do pip
+
+```toml
+[phases.setup]
+nixPkgs = ["nodejs", "python39", "python39Packages.pip"]
+
+[phases.install]
+cmds = [
+  "cd frontend && npm ci",
+  "cd backend && python -m pip install --user -r requirements.txt"
+]
+```
+
+### Resultado
+- ✅ Contorna o bloqueio do ambiente gerenciado
+- ✅ Instala pacotes no espaço do usuário
+- ✅ Mantém compatibilidade com Nix
 
 ## Verificações Realizadas
 
@@ -155,6 +184,11 @@ git push origin master
 git add nixpacks.toml
 git commit -m "🔧 Fix pip module error - Add explicit python39Packages.pip and use pip3"
 git push origin master
+
+# Sexta correção
+git add nixpacks.toml
+git commit -m "🔧 Fix externally managed environment - Use python39 with --user flag"
+git push origin master
 ```
 
 ## Lições Aprendidas
@@ -184,3 +218,4 @@ git push origin master
 - `9f77918` - Fix pip module error (Use python39Full instead of python39 + python39Packages.pip)
 - `6f5d696` - Fix pip command not found (Use python -m pip instead of direct pip)
 - `bb7c9aa` - Fix pip module error (Add explicit python39Packages.pip and use pip3)
+- `bbdade8` - Fix externally managed environment (Use python39 with --user flag)
