@@ -1,10 +1,10 @@
 [phases.setup]
-nixPkgs = ["nodejs", "python39Full", "python39Packages.pip"]
+nixPkgs = ["nodejs", "python39", "python39Packages.pip"]
 
 [phases.install]
 cmds = [
   "cd frontend && npm ci",
-  "cd backend && pip3 install -r requirements.txt"
+  "cd backend && python -m pip install --user -r requirements.txt"
 ]
 
 [phases.build]  
