@@ -1,0 +1,25 @@
+{
+  "short_name": "Agenda Fácil",
+  "name": "Agenda Fácil - Sistema de Agendamento",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "favicon-32x32.svg",
+      "type": "image/svg+xml",
+      "sizes": "32x32"
+    },
+    {
+      "src": "agenda-icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "64x64"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#3b82f6",
+  "background_color": "#ffffff"
+}

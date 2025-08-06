@@ -1,0 +1,25 @@
+{
+  "name": "agenda-facil",
+  "version": "1.0.0",
+  "description": "Sistema completo de gerenciamento de compromissos e tarefas",
+  "main": "backend/app.py",
+  "scripts": {
+    "build": "cd frontend && npm ci && CI=false npm run build",
+    "start": "cd backend && python app.py",
+    "install-deps": "cd frontend && npm ci && cd ../backend && pip install -r requirements.txt"
+  },
+  "keywords": [
+    "agenda",
+    "calendar",
+    "tasks",
+    "react",
+    "flask",
+    "railway"
+  ],
+  "author": "AgendaFácil Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.x",
+    "python": ">=3.8"
+  }
+}
