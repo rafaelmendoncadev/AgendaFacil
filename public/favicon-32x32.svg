@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="calendarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Calendar base -->
+  <rect x="4" y="6" width="24" height="22" rx="2" ry="2" fill="url(#calendarGradient)" stroke="#1e40af" stroke-width="1"/>
+  
+  <!-- Calendar header -->
+  <rect x="4" y="6" width="24" height="6" rx="2" ry="2" fill="#1e40af"/>
+  <rect x="4" y="10" width="24" height="2" fill="#1e40af"/>
+  
+  <!-- Spiral bindings -->
+  <circle cx="9" cy="4" r="1" fill="#6b7280"/>
+  <circle cx="16" cy="4" r="1" fill="#6b7280"/>
+  <circle cx="23" cy="4" r="1" fill="#6b7280"/>
+  
+  <!-- Binding rings -->
+  <rect x="8" y="3" width="2" height="4" rx="1" ry="1" fill="#9ca3af"/>
+  <rect x="15" y="3" width="2" height="4" rx="1" ry="1" fill="#9ca3af"/>
+  <rect x="22" y="3" width="2" height="4" rx="1" ry="1" fill="#9ca3af"/>
+  
+  <!-- Calendar grid -->
+  <line x1="8" y1="14" x2="24" y2="14" stroke="#dbeafe" stroke-width="0.5" opacity="0.5"/>
+  <line x1="8" y1="18" x2="24" y2="18" stroke="#dbeafe" stroke-width="0.5" opacity="0.5"/>
+  <line x1="8" y1="22" x2="24" y2="22" stroke="#dbeafe" stroke-width="0.5" opacity="0.5"/>
+  
+  <line x1="12" y1="12" x2="12" y2="26" stroke="#dbeafe" stroke-width="0.5" opacity="0.5"/>
+  <line x1="16" y1="12" x2="16" y2="26" stroke="#dbeafe" stroke-width="0.5" opacity="0.5"/>
+  <line x1="20" y1="12" x2="20" y2="26" stroke="#dbeafe" stroke-width="0.5" opacity="0.5"/>
+  
+  <!-- Important date -->
+  <circle cx="14" cy="20" r="1.5" fill="#ef4444" opacity="0.9"/>
+  
+  <!-- Clock overlay -->
+  <circle cx="22" cy="24" r="3" fill="#ffffff" stroke="#3b82f6" stroke-width="1"/>
+  <line x1="22" y1="24" x2="22" y2="22" stroke="#3b82f6" stroke-width="1" stroke-linecap="round"/>
+  <line x1="22" y1="24" x2="23.5" y2="24" stroke="#3b82f6" stroke-width="0.8" stroke-linecap="round"/>
+</svg>

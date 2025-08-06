@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="calendarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Calendar base -->
+  <rect x="8" y="12" width="48" height="44" rx="4" ry="4" fill="url(#calendarGradient)" stroke="#1e40af" stroke-width="2"/>
+  
+  <!-- Calendar header -->
+  <rect x="8" y="12" width="48" height="12" rx="4" ry="4" fill="#1e40af"/>
+  <rect x="8" y="20" width="48" height="4" fill="#1e40af"/>
+  
+  <!-- Spiral bindings -->
+  <circle cx="18" cy="8" r="2" fill="#6b7280" stroke="#4b5563" stroke-width="1"/>
+  <circle cx="32" cy="8" r="2" fill="#6b7280" stroke="#4b5563" stroke-width="1"/>
+  <circle cx="46" cy="8" r="2" fill="#6b7280" stroke="#4b5563" stroke-width="1"/>
+  
+  <!-- Binding rings -->
+  <rect x="16" y="6" width="4" height="8" rx="2" ry="2" fill="#9ca3af"/>
+  <rect x="30" y="6" width="4" height="8" rx="2" ry="2" fill="#9ca3af"/>
+  <rect x="44" y="6" width="4" height="8" rx="2" ry="2" fill="#9ca3af"/>
+  
+  <!-- Calendar grid lines -->
+  <line x1="16" y1="28" x2="48" y2="28" stroke="#dbeafe" stroke-width="1" opacity="0.5"/>
+  <line x1="16" y1="36" x2="48" y2="36" stroke="#dbeafe" stroke-width="1" opacity="0.5"/>
+  <line x1="16" y1="44" x2="48" y2="44" stroke="#dbeafe" stroke-width="1" opacity="0.5"/>
+  
+  <line x1="24" y1="24" x2="24" y2="52" stroke="#dbeafe" stroke-width="1" opacity="0.5"/>
+  <line x1="32" y1="24" x2="32" y2="52" stroke="#dbeafe" stroke-width="1" opacity="0.5"/>
+  <line x1="40" y1="24" x2="40" y2="52" stroke="#dbeafe" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Important date highlight -->
+  <circle cx="28" cy="40" r="3" fill="#ef4444" opacity="0.9"/>
+  
+  <!-- Clock icon overlay -->
+  <circle cx="44" cy="48" r="6" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+  <line x1="44" y1="48" x2="44" y2="44" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
+  <line x1="44" y1="48" x2="47" y2="48" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Title text area -->
+  <rect x="12" y="16" width="32" height="4" rx="1" ry="1" fill="#ffffff" opacity="0.9"/>
+</svg>

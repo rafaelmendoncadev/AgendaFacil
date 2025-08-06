@@ -10,7 +10,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useAppointments } from '@/hooks/useAppointments';
+import { useAppointments } from '@/hooks';
+import { useToast } from '@/hooks/use-toast';
 import { Appointment } from '@/types';
 import { format } from 'date-fns';
 
@@ -28,12 +29,13 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   editingAppointment,
 }) => {
   const { addAppointment, updateAppointment } = useAppointments();
+  const { toast } = useToast();
+  const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     date: format(selectedDate, 'yyyy-MM-dd'),
     time: '',
-    reminder: true,
   });
 
   useEffect(() => {
@@ -43,7 +45,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         description: editingAppointment.description,
         date: editingAppointment.date,
         time: editingAppointment.time,
-        reminder: editingAppointment.reminder || false,
       });
     } else {
       setFormData({
@@ -51,12 +52,11 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         description: '',
         date: format(selectedDate, 'yyyy-MM-dd'),
         time: '',
-        reminder: true,
       });
     }
   }, [editingAppointment, selectedDate, isOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.title.trim() || !formData.time.trim()) {
@@ -64,28 +64,47 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       return;
     }
 
-    if (editingAppointment) {
-      updateAppointment(editingAppointment.id, formData);
-    } else {
-      addAppointment(formData);
+    setIsSaving(true);
+    try {
+      if (editingAppointment) {
+        await updateAppointment(editingAppointment.id, formData);
+        toast({
+          title: "Sucesso!",
+          description: "Compromisso atualizado com sucesso!",
+          variant: "success",
+        });
+      } else {
+        await addAppointment(formData);
+        toast({
+          title: "Sucesso!",
+          description: "Compromisso criado com sucesso!",
+          variant: "success",
+        });
+        
+        // Pequeno delay para garantir que o estado foi atualizado antes de fechar
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+      onClose();
+    } catch (error) {
+      console.error('Erro ao salvar compromisso:', error);
+      toast({
+        title: "Erro!",
+        description: "Erro ao salvar compromisso. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
     }
-
-    onClose();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    if (type === 'checkbox') {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] mx-4 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {editingAppointment ? 'Editar Compromisso' : 'Novo Compromisso'}
@@ -123,7 +142,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="date">Data</Label>
               <Input
@@ -149,24 +168,13 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <input
-              id="reminder"
-              name="reminder"
-              type="checkbox"
-              checked={formData.reminder}
-              onChange={handleChange}
-              className="rounded border-input"
-            />
-            <Label htmlFor="reminder">Ativar lembrete</Label>
-          </div>
 
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+          <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0">
+            <Button type="button" variant="outline" onClick={onClose} className="w-full sm:w-auto">
               Cancelar
             </Button>
-            <Button type="submit">
-              {editingAppointment ? 'Salvar Alterações' : 'Criar Compromisso'}
+            <Button type="submit" disabled={isSaving} className="w-full sm:w-auto">
+              {isSaving ? 'Salvando...' : (editingAppointment ? 'Salvar Alterações' : 'Criar Compromisso')}
             </Button>
           </DialogFooter>
         </form>
