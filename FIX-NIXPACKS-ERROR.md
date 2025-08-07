@@ -155,6 +155,70 @@ cmds = [
 2. **Monitorar Logs**: Verificar se não há outros erros
 3. **Testar Aplicação**: Confirmar que todas as funcionalidades estão operacionais
 
+## 7ª Correção: Garantir disponibilidade do pip com ensurepip
+
+**Problema**: Erro "No module named pip" persistia mesmo com python39Packages.pip
+
+**Solução**: Usar `python -m ensurepip --upgrade` antes da instalação
+
+**Alterações**:
+```toml
+[phases.install]
+cmds = [
+  "cd frontend && npm ci",
+  "cd backend && python -m ensurepip --upgrade && python -m pip install -r requirements.txt"
+]
+```
+
+**Deploy**:
+```bash
+git add nixpacks.toml
+git commit -m "🔧 Fix pip module error - Use ensurepip to guarantee pip availability"
+git push origin master
+```
+
+## 8ª Correção: Remover conflito railway.json e simplificar nixpacks.toml
+
+**Problema**: Conflito entre railway.json e nixpacks.toml causando falhas de build
+
+**Solução**: 
+1. Remover railway.json completamente
+2. Simplificar nixpacks.toml seguindo as melhores práticas
+3. Usar apenas `python39` e `gcc` nos nixPkgs
+4. Usar `pip install` direto sem ensurepip
+
+**Alterações**:
+- **Removido**: `railway.json`
+- **Atualizado**: `nixpacks.toml`
+
+```toml
+[phases.setup]
+nixPkgs = ["nodejs", "python39", "gcc"]
+
+[phases.install]
+cmds = [
+  "cd frontend && npm ci",
+  "cd backend && pip install -r requirements.txt"
+]
+
+[phases.build]  
+cmds = ["cd frontend && CI=false npm run build"]
+
+[start]
+cmd = "cd backend && python app.py"
+
+[variables]
+NODE_ENV = "production"
+NIXPACKS_PYTHON_VERSION = "3.9"
+```
+
+**Deploy**:
+```bash
+git add .
+git commit -m "🔧 Fix Railway build - Remove railway.json conflict and simplify nixpacks.toml"
+git push origin master
+```
+
 ## Comandos para Deploy
 
 ```bash
@@ -189,6 +253,16 @@ git push origin master
 git add nixpacks.toml
 git commit -m "🔧 Fix externally managed environment - Use python39 with --user flag"
 git push origin master
+
+# Sétima correção
+git add nixpacks.toml
+git commit -m "🔧 Fix pip module error - Use ensurepip to guarantee pip availability"
+git push origin master
+
+# Oitava correção
+git add .
+git commit -m "🔧 Fix Railway build - Remove railway.json conflict and simplify nixpacks.toml"
+git push origin master
 ```
 
 ## Lições Aprendidas
@@ -219,3 +293,5 @@ git push origin master
 - `6f5d696` - Fix pip command not found (Use python -m pip instead of direct pip)
 - `bb7c9aa` - Fix pip module error (Add explicit python39Packages.pip and use pip3)
 - `bbdade8` - Fix externally managed environment (Use python39 with --user flag)
+- `7e8f123` - Fix pip module error (Use ensurepip to guarantee pip availability)
+- `36e9a2c` - Fix Railway build (Remove railway.json conflict and simplify nixpacks.toml)
