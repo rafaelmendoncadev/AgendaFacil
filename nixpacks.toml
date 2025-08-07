@@ -1,9 +1,9 @@
 [phases.setup]
-nixPkgs = ["python39", "gcc"]
+nixPkgs = ["nodejs", "npm"]
 
 [phases.install]
 dependsOn = ["setup"]
-cmds = ["cd backend && python -m pip install -r requirements.txt"]
+cmds = ["cd backend && npm install"]
 
 [start]
-cmd = "cd backend && python app.py"
+cmd = "cd backend && node server.js"

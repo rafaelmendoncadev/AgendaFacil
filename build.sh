@@ -13,7 +13,7 @@ cd ..
 # Instalar dependências do backend
 echo "🐍 Installing Python dependencies..."
 cd backend
-pip install -r requirements.txt
+npm install
 
 echo "✅ Build completed successfully!"
 echo "📁 Static files are in: frontend/build/"

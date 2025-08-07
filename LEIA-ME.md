@@ -62,9 +62,9 @@ stop.bat
 ```
 AgendaFacil/
 ├── backend/
-│   ├── app.py              # Aplicação Flask principal
-│   ├── models.py           # Modelos SQLAlchemy
-│   ├── requirements.txt    # Dependências Python
+│   ├── server.js           # Aplicação Express principal
+│   ├── models/             # Modelos Node.js
+│   ├── package.json        # Dependências Node.js
 │   └── agenda_facil.db     # Banco SQLite (criado automaticamente)
 ├── frontend/
 │   ├── src/
@@ -105,8 +105,8 @@ AgendaFacil/
 **Backend:**
 ```bash
 cd backend
-python -m pip install -r requirements.txt
-python app.py
+npm install
+npm start
 ```
 
 **Frontend:**
@@ -126,7 +126,7 @@ start-dev.bat
 
 **Problemas com dependências:**
 ```bash
-cd backend && python -m pip install -r requirements.txt
+cd backend && npm install
 cd frontend && npm install
 ```
 

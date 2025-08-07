@@ -46,7 +46,7 @@ cd frontend && npm ci && CI=false npm run build
 
 ### ✅ Start Command (Automático):
 ```bash
-cd backend && python app.py
+cd backend && npm start
 ```
 
 ### ✅ Health Check:

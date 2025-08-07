@@ -17,7 +17,7 @@ start-dev.bat
 ### 1. Iniciar Backend:
 ```cmd
 cd backend
-python app.py
+npm start
 ```
 
 ### 2. Iniciar Frontend (Em outro terminal):

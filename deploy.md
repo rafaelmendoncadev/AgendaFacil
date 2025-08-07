@@ -104,7 +104,7 @@ export DATABASE_URL=sqlite:///test.db
 export JWT_SECRET_KEY=test-key
 
 # Executar
-cd backend && python app.py
+cd backend && npm start
 ```
 
 ## 🎯 Checklist de Deploy

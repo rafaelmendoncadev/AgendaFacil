@@ -4,18 +4,10 @@ echo    AgendaFacil - Modo Desenvolvimento
 echo ================================
 
 :: Verifica se estamos no diretório correto
-if not exist "backend\app.py" (
+if not exist "backend\server.js" (
     echo ERRO: Execute este script na pasta raiz do projeto AgendaFacil
     echo Diretorio atual: %CD%
     dir
-    pause
-    exit /b 1
-)
-
-:: Verifica se Python está instalado
-python --version >nul 2>&1
-if %errorlevel% neq 0 (
-    echo ERRO: Python não encontrado. Instale o Python primeiro.
     pause
     exit /b 1
 )
@@ -31,14 +23,16 @@ if %errorlevel% neq 0 (
 echo.
 echo [1/4] Verificando dependências do Backend...
 cd backend
-if not exist "requirements.txt" (
-    echo ERRO: requirements.txt não encontrado
+if not exist "package.json" (
+    echo ERRO: package.json não encontrado
     pause
     exit /b 1
 )
 
-echo Instalando dependências Python...
-python -m pip install -r requirements.txt >nul 2>&1
+if not exist "node_modules" (
+    echo Instalando dependências Node.js do backend...
+    npm install
+)
 
 echo.
 echo [2/4] Verificando dependências do Frontend...
@@ -55,9 +49,9 @@ if not exist "node_modules" (
 )
 
 echo.
-echo [3/4] Iniciando Backend (Flask)...
+echo [3/4] Iniciando Backend (Node.js)...
 cd ..\backend
-start "AgendaFacil Backend - http://localhost:5000" cmd /k "python app.py"
+start "AgendaFacil Backend - http://localhost:5000" cmd /k "npm start"
 
 echo Aguardando backend inicializar...
 timeout /t 5 /nobreak >nul

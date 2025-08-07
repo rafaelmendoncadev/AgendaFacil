@@ -1,14 +1,14 @@
-FROM python:3.9-slim
+FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy requirements from backend directory
-COPY backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy package files from backend directory
+COPY backend/package*.json ./
+RUN npm install
 
 # Copy backend code
 COPY backend/ .
 
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+CMD ["node", "server.js"]

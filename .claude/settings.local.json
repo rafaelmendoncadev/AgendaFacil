@@ -27,7 +27,12 @@
       "Bash(git init:*)",
       "Bash(git add:*)",
       "Bash(git rm:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npm run init-db:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm run install-deps:*)",
+      "Bash(start \"AgendaFacil Backend\" cmd /k \"npm start\")",
+      "Bash(start \"AgendaFacil Frontend\" cmd /k \"npm start\")"
     ],
     "deny": []
   }

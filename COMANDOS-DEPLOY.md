@@ -61,7 +61,7 @@ curl -X POST https://seu-app-name.railway.app/api/auth/login \
 
 ```bash
 # Executar verificação completa
-python verify-deploy.py
+# Verificação removida - não mais necessária
 
 # Testar build do frontend localmente
 cd frontend
@@ -71,8 +71,8 @@ cd ..
 
 # Testar backend localmente
 cd backend
-pip install -r requirements.txt
-python app.py
+npm install
+npm start
 ```
 
 ## 🛠️ 5. Comandos de Debug (Se necessário)
@@ -145,7 +145,7 @@ npm install
 ### Se precisar recriar banco:
 ```bash
 # No console da Railway ou localmente
-python backend/init_db.py
+cd backend && npm run init-db
 ```
 
 ---

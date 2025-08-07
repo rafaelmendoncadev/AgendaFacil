@@ -31,8 +31,8 @@ Um MVP (Minimum Viable Product) de SaaS de agenda de compromissos desenvolvido c
 ```
 AgendaFacil/
 ├── backend/
-│   ├── app.py              # Servidor Flask
-│   └── requirements.txt
+│   ├── server.js           # Servidor Express
+│   └── package.json
 ├── frontend/
 │   ├── src/
 │   │   ├── components/     # Componentes React
@@ -68,7 +68,7 @@ AgendaFacil/
 cd backend
 
 # Instale as dependências Python
-pip install -r requirements.txt
+npm install
 ```
 
 ### 2. Configuração do Frontend (React)
@@ -101,7 +101,7 @@ npm run build
 2. **Inicie o servidor Flask:**
 ```bash
 # No diretório backend
-python app.py
+npm start
 ```
 
 A aplicação estará disponível em: `http://localhost:5000`

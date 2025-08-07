@@ -4,18 +4,8 @@ Write-Host "================================" -ForegroundColor Cyan
 Write-Host ""
 
 # Verifica se estamos no diretório correto
-if (!(Test-Path "backend\app.py")) {
+if (!(Test-Path "backend\server.js")) {
     Write-Host "ERRO: Execute este script na pasta raiz do projeto AgendaFacil" -ForegroundColor Red
-    Read-Host "Pressione Enter para sair"
-    exit 1
-}
-
-# Verifica se Python está instalado
-try {
-    $pythonVersion = python --version 2>&1
-    Write-Host "✓ Python encontrado: $pythonVersion" -ForegroundColor Green
-} catch {
-    Write-Host "ERRO: Python não encontrado. Instale o Python primeiro." -ForegroundColor Red
     Read-Host "Pressione Enter para sair"
     exit 1
 }
@@ -34,14 +24,16 @@ Write-Host ""
 Write-Host "[1/4] Verificando dependências do Backend..." -ForegroundColor Yellow
 Set-Location backend
 
-if (!(Test-Path "requirements.txt")) {
-    Write-Host "ERRO: requirements.txt não encontrado" -ForegroundColor Red
+if (!(Test-Path "package.json")) {
+    Write-Host "ERRO: package.json não encontrado" -ForegroundColor Red
     Read-Host "Pressione Enter para sair"
     exit 1
 }
 
-Write-Host "Instalando dependências Python..."
-python -m pip install -r requirements.txt | Out-Null
+if (!(Test-Path "node_modules")) {
+    Write-Host "Instalando dependências Node.js do backend..."
+    npm install
+}
 
 Write-Host ""
 Write-Host "[2/4] Verificando dependências do Frontend..." -ForegroundColor Yellow
@@ -59,9 +51,9 @@ if (!(Test-Path "node_modules")) {
 }
 
 Write-Host ""
-Write-Host "[3/4] Iniciando Backend (Flask)..." -ForegroundColor Yellow
+Write-Host "[3/4] Iniciando Backend (Node.js)..." -ForegroundColor Yellow
 Set-Location ..\backend
-Start-Process -WindowStyle Normal -FilePath "cmd" -ArgumentList "/k", "python app.py" -WorkingDirectory (Get-Location)
+Start-Process -WindowStyle Normal -FilePath "cmd" -ArgumentList "/k", "npm start" -WorkingDirectory (Get-Location)
 
 Write-Host "Aguardando backend inicializar..."
 Start-Sleep -Seconds 5
