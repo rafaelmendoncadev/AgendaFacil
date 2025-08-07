@@ -295,3 +295,34 @@ git push origin master
 - `bbdade8` - Fix externally managed environment (Use python39 with --user flag)
 - `7e8f123` - Fix pip module error (Use ensurepip to guarantee pip availability)
 - `36e9a2c` - Fix Railway build (Remove railway.json conflict and simplify nixpacks.toml)
+- `92adc0c` - Simplify nixpacks.toml (Remove frontend build and use python -m pip)
+
+## 🔧 Nona Correção: Simplificação Completa do nixpacks.toml
+
+**Problema**: Erro "pip: command not found" persistindo mesmo após múltiplas correções.
+
+**Solução Aplicada**:
+1. **Remoção do Frontend**: Eliminado nodejs e comandos de build do frontend
+2. **Foco no Backend**: Configuração exclusiva para Python/Flask
+3. **Comando Correto**: Uso de `python -m pip install` conforme recomendações
+4. **Dependências Mínimas**: Apenas `python39` e `gcc`
+
+**Configuração Final**:
+```toml
+[phases.setup]
+nixPkgs = ["python39", "gcc"]
+
+[phases.install]
+dependsOn = ["setup"]
+cmds = ["cd backend && python -m pip install -r requirements.txt"]
+
+[start]
+cmd = "cd backend && python app.py"
+```
+
+**Benefícios**:
+- ✅ Configuração minimalista e focada
+- ✅ Eliminação de conflitos entre frontend/backend
+- ✅ Uso do método recomendado `python -m pip`
+- ✅ Redução de complexidade de build
+- ✅ Maior compatibilidade com Railway/Nixpacks
