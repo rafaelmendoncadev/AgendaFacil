@@ -59,16 +59,19 @@ async function initDatabase() {
     await db.run('CREATE INDEX IF NOT EXISTS idx_tasks_priority ON tasks(priority)');
 
     console.log('Banco de dados inicializado com sucesso!');
+    return db; // Mantém a conexão aberta
     
   } catch (error) {
     console.error('Erro ao inicializar o banco de dados:', error);
-  } finally {
-    await db.close();
+    await db.close(); // Fecha a conexão em caso de erro
+    throw error;
   }
 }
 
 if (require.main === module) {
-  initDatabase();
+  initDatabase().catch(err => {
+    console.error('Erro ao inicializar banco de dados:', err);
+  });
 }
 
 module.exports = initDatabase;
