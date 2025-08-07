@@ -125,15 +125,19 @@ export const AppointmentsProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const deleteAppointment = async (id: string) => {
     try {
       setError(null);
-      console.log('useAppointments - Deleting appointment:', id);
+      console.log('Hook useAppointments: Iniciando exclusão do compromisso', id);
       
       await apiService.deleteAppointment(id);
-      console.log('useAppointments - Appointment deleted successfully');
+      console.log('Hook useAppointments: Compromisso excluído com sucesso');
       
-      // REFRESH AUTOMÁTICO: Recarregar a lista completa para garantir sincronização imediata
-      const updatedResponse = await apiService.getAppointments();
-      setAppointments(updatedResponse.appointments || []);
-      console.log('useAppointments - Database refreshed and state updated after appointment deletion');
+      // Atualização otimista - remover da lista local imediatamente
+      setAppointments(prev => prev.filter(app => app.id !== id));
+      
+      // Refresh automático para garantir sincronização
+      setTimeout(() => {
+        console.log('Hook useAppointments: Fazendo refresh após exclusão');
+        fetchAppointments();
+      }, 100);
       
       toast({
         title: "Sucesso!",
@@ -142,7 +146,7 @@ export const AppointmentsProvider: React.FC<{ children: React.ReactNode }> = ({ 
       });
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Erro ao excluir compromisso';
-      console.error('useAppointments - Error deleting appointment:', error);
+      console.error('Hook useAppointments: Erro ao excluir compromisso:', error);
       setError(errorMsg);
       toast({
         title: "Erro!",

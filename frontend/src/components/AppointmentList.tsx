@@ -22,7 +22,9 @@ const AppointmentList: React.FC<AppointmentListProps> = ({ selectedDate, onEditA
   const handleDeleteAppointment = async (id: string) => {
     if (window.confirm('Tem certeza que deseja excluir este compromisso?')) {
       try {
+        console.log('Tentando excluir compromisso com ID:', id);
         await deleteAppointment(id);
+        console.log('Compromisso excluído com sucesso');
       } catch (error) {
         console.error('Erro ao excluir compromisso:', error);
         alert('Erro ao excluir compromisso. Tente novamente.');

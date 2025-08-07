@@ -80,10 +80,17 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
           description: "Compromisso criado com sucesso!",
           variant: "success",
         });
-        
-        // Pequeno delay para garantir que o estado foi atualizado antes de fechar
-        await new Promise(resolve => setTimeout(resolve, 200));
       }
+      
+      // Resetar o formulário
+      setFormData({
+        title: '',
+        description: '',
+        date: format(selectedDate, 'yyyy-MM-dd'),
+        time: '',
+      });
+      
+      // Fechar o modal
       onClose();
     } catch (error) {
       console.error('Erro ao salvar compromisso:', error);
@@ -102,8 +109,14 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      onClose();
+    }
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[425px] mx-4 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
