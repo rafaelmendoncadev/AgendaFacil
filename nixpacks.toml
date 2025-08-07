@@ -1,18 +1,9 @@
 [phases.setup]
-nixPkgs = ["nodejs", "python39", "gcc"]
+nixPkgs = ["python39", "gcc"]
 
 [phases.install]
-cmds = [
-  "cd frontend && npm ci",
-  "cd backend && pip install -r requirements.txt"
-]
-
-[phases.build]  
-cmds = ["cd frontend && CI=false npm run build"]
+dependsOn = ["setup"]
+cmds = ["cd backend && python -m pip install -r requirements.txt"]
 
 [start]
 cmd = "cd backend && python app.py"
-
-[variables]
-NODE_ENV = "production"
-NIXPACKS_PYTHON_VERSION = "3.9"
