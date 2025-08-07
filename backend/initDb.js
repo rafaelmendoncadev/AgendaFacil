@@ -6,12 +6,6 @@ async function initDatabase() {
   const db = new Database();
   
   try {
-    // Criar diretório instance se não existir
-    const instanceDir = path.join(__dirname, 'instance');
-    if (!fs.existsSync(instanceDir)) {
-      fs.mkdirSync(instanceDir, { recursive: true });
-    }
-
     console.log('Criando tabelas...');
 
     // Criar tabela de usuários

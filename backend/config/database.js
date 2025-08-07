@@ -1,9 +1,18 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
 
 class Database {
   constructor() {
-    const dbPath = process.env.DATABASE_PATH || path.join(__dirname, '..', 'instance', 'agenda_facil.db');
+    // Para Railway, usar o diretório atual ou variável de ambiente
+    const dbDir = process.env.DATABASE_DIR || path.join(__dirname, '..');
+    const dbPath = process.env.DATABASE_PATH || path.join(dbDir, 'agenda_facil.db');
+    
+    // Garantir que o diretório existe
+    const dir = path.dirname(dbPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
     
     this.db = new sqlite3.Database(dbPath, (err) => {
       if (err) {

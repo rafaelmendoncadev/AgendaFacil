@@ -6,6 +6,11 @@ dependsOn = ["setup"]
 cmds = ["npm install"]
 workDir = "backend"
 
+[phases.build]
+dependsOn = ["install"]
+cmds = ["node initDb.js"]
+workDir = "backend"
+
 [start]
 cmd = "node server.js"
 workDir = "backend"
