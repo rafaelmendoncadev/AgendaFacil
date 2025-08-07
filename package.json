@@ -4,11 +4,11 @@
   "description": "Sistema completo de gerenciamento de compromissos e tarefas",
   "main": "backend/server.js",
   "scripts": {
-    "build": "cd backend && npm install",
-    "start": "cd backend && npm start",
-    "dev": "cd backend && npm run dev",
-    "init-db": "cd backend && npm run init-db",
-    "install-deps": "cd backend && npm install"
+    "build": "npm install --prefix backend",
+    "start": "node backend/server.js",
+    "dev": "npm run dev --prefix backend",
+    "init-db": "npm run init-db --prefix backend",
+    "install-deps": "npm install --prefix backend"
   },
   "keywords": [
     "agenda",
