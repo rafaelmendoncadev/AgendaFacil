@@ -98,12 +98,12 @@ class ApiService {
 
   // Compromissos
   async getAppointments(date?: string): Promise<{ appointments: Appointment[] }> {
-    const url = new URL(`${API_BASE_URL}/appointments`);
+    let url = `${API_BASE_URL}/appointments`;
     if (date) {
-      url.searchParams.append('date', date);
+      url += `?date=${encodeURIComponent(date)}`;
     }
 
-    const response = await fetch(url.toString(), {
+    const response = await fetch(url, {
       headers: this.getAuthHeaders()
     });
 
