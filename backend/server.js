@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 });
 
 // Servir arquivos estáticos do React (se existirem)
-const frontendBuildPath = path.join(__dirname, '../frontend/build');
+const frontendBuildPath = path.join(__dirname, 'public');
 app.use(express.static(frontendBuildPath));
 
 // Health check
