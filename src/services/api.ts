@@ -1,6 +1,4 @@
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/api' 
-  : 'http://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 interface LoginResponse {
   access_token: string;
@@ -98,12 +96,12 @@ class ApiService {
 
   // Compromissos
   async getAppointments(date?: string): Promise<{ appointments: Appointment[] }> {
-    const url = new URL(`${API_BASE_URL}/appointments`);
+    let url = `${API_BASE_URL}/appointments`;
     if (date) {
-      url.searchParams.append('date', date);
+      url += `?date=${encodeURIComponent(date)}`;
     }
 
-    const response = await fetch(url.toString(), {
+    const response = await fetch(url, {
       headers: this.getAuthHeaders()
     });
 
