@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Task } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from './use-toast';
+import { apiService } from '@/services/api';
 
 interface UseTasksReturn {
   tasks: Task[];
@@ -20,14 +21,6 @@ export const useTasks = (): UseTasksReturn => {
   const { isAuthenticated } = useAuth();
   const { toast } = useToast();
 
-  const getAuthHeaders = (): Record<string, string> => {
-    const token = localStorage.getItem('access_token');
-    return {
-      'Content-Type': 'application/json',
-      ...(token && { 'Authorization': `Bearer ${token}` })
-    };
-  };
-
   const fetchTasks = async (filters?: { status?: string; priority?: string }) => {
     if (!isAuthenticated) return;
 
@@ -35,22 +28,7 @@ export const useTasks = (): UseTasksReturn => {
     setError(null);
 
     try {
-      const queryParams = new URLSearchParams();
-      if (filters?.status) queryParams.append('status', filters.status);
-      if (filters?.priority) queryParams.append('priority', filters.priority);
-
-      const response = await fetch(
-        `http://localhost:5000/api/tasks${queryParams.toString() ? `?${queryParams.toString()}` : ''}`,
-        {
-          headers: getAuthHeaders(),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Erro ao buscar tarefas');
-      }
-
-      const data = await response.json();
+      const data = await apiService.getTasks(filters);
       setTasks(data.tasks || []);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
@@ -69,17 +47,7 @@ export const useTasks = (): UseTasksReturn => {
     if (!isAuthenticated) return null;
 
     try {
-      const response = await fetch('http://localhost:5000/api/tasks', {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(taskData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao criar tarefa');
-      }
-
-      const data = await response.json();
+      const data = await apiService.createTask(taskData);
       const newTask = data.task;
       
       setTasks(prev => [newTask, ...prev]);
@@ -105,17 +73,7 @@ export const useTasks = (): UseTasksReturn => {
     if (!isAuthenticated) return null;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/tasks/${id}`, {
-        method: 'PUT',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(updates),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao atualizar tarefa');
-      }
-
-      const data = await response.json();
+      const data = await apiService.updateTask(id, updates);
       const updatedTask = data.task;
       
       setTasks(prev => prev.map(task => 
@@ -143,15 +101,8 @@ export const useTasks = (): UseTasksReturn => {
     if (!isAuthenticated) return false;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/tasks/${id}`, {
-        method: 'DELETE',
-        headers: getAuthHeaders(),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao excluir tarefa');
-      }
-
+      await apiService.deleteTask(id);
+      
       setTasks(prev => prev.filter(task => task.id !== id));
       
       toast({

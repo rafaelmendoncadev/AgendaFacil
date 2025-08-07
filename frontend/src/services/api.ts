@@ -32,6 +32,18 @@ interface Appointment {
   updated_at: string;
 }
 
+interface Task {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string;
+  priority: 'low' | 'medium' | 'high';
+  status: 'pending' | 'in_progress' | 'completed';
+  due_date: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 class ApiService {
   private getAuthHeaders(): Record<string, string> {
     const token = localStorage.getItem('access_token');
@@ -85,6 +97,50 @@ class ApiService {
 
     if (!response.ok) {
       throw new Error('Erro ao obter dados do usuário');
+    }
+
+    return response.json();
+  }
+
+  async createTask(taskData: Omit<Task, 'id' | 'user_id' | 'created_at' | 'updated_at'>): Promise<{ message: string; task: Task }> {
+    const response = await fetch(`${API_BASE_URL}/tasks`, {
+      method: 'POST',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(taskData)
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erro ao criar tarefa');
+    }
+
+    return response.json();
+  }
+
+  async updateTask(id: string, updates: Partial<Task>): Promise<{ message: string; task: Task }> {
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+      method: 'PUT',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(updates)
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erro ao atualizar tarefa');
+    }
+
+    return response.json();
+  }
+
+  async deleteTask(id: string): Promise<{ message: string }> {
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+      method: 'DELETE',
+      headers: this.getAuthHeaders()
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erro ao excluir tarefa');
     }
 
     return response.json();
@@ -167,7 +223,83 @@ class ApiService {
 
     return response.json();
   }
+
+  // Tarefas
+  async getTasks(filters?: { status?: string; priority?: string }): Promise<{ tasks: Task[] }> {
+    const queryParams = new URLSearchParams();
+    if (filters?.status) queryParams.append('status', filters.status);
+    if (filters?.priority) queryParams.append('priority', filters.priority);
+
+    const url = `${API_BASE_URL}/tasks${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    
+    const response = await fetch(url, {
+      headers: this.getAuthHeaders()
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erro ao carregar tarefas');
+    }
+
+    return response.json();
+  }
+
+  async createTask(task: {
+    title: string;
+    description: string;
+    priority: 'low' | 'medium' | 'high';
+    status: 'pending' | 'in_progress' | 'completed';
+    due_date: string | null;
+  }): Promise<{ message: string; task: Task }> {
+    const response = await fetch(`${API_BASE_URL}/tasks`, {
+      method: 'POST',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(task)
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erro ao criar tarefa');
+    }
+
+    return response.json();
+  }
+
+  async updateTask(id: string, task: Partial<{
+    title: string;
+    description: string;
+    priority: 'low' | 'medium' | 'high';
+    status: 'pending' | 'in_progress' | 'completed';
+    due_date: string | null;
+  }>): Promise<{ message: string; task: Task }> {
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+      method: 'PUT',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(task)
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erro ao atualizar tarefa');
+    }
+
+    return response.json();
+  }
+
+  async deleteTask(id: string): Promise<{ message: string }> {
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+      method: 'DELETE',
+      headers: this.getAuthHeaders()
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erro ao excluir tarefa');
+    }
+
+    return response.json();
+  }
 }
 
 export const apiService = new ApiService();
-export type { Appointment };
+export type { Appointment, Task };

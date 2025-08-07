@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Task } from '@/types';
 
 interface TaskFormProps {
@@ -105,6 +105,12 @@ const TaskForm: React.FC<TaskFormProps> = ({
               <X size={16} />
             </Button>
           </DialogTitle>
+          <DialogDescription>
+            {editingTask 
+              ? 'Faça as alterações necessárias na sua tarefa.'
+              : 'Preencha os detalhes da sua nova tarefa.'
+            }
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
