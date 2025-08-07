@@ -14,7 +14,7 @@ const port = process.env.PORT || 5000;
 // Configurar CORS
 const isProduction = process.env.NODE_ENV === 'production';
 const corsOrigins = isProduction 
-  ? (process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : ['https://*'])
+  ? (process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : ['https://agendafacil-production-49bf.up.railway.app'])
   : ['http://localhost:3000', 'http://127.0.0.1:3000'];
 
 app.use(cors({
